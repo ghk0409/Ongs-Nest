@@ -9,4 +9,10 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
+
+  // 비즈니스 로직이 담긴 함수만 실행시켜주도록 변경!
+  @Get('/hello')
+  sayHello(): string {
+    return this.appService.getHi();
+  }
 }
