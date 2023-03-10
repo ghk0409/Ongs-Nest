@@ -9,6 +9,8 @@ import {
     Put,
     Query,
 } from '@nestjs/common';
+import { CreateMovieDto } from './dto/create-movie.dto';
+import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './entities/movie.entity';
 import { MoviesService } from './movies.service';
 
@@ -29,22 +31,22 @@ export class MoviesController {
     }
     // 단일 영화 정보, @Param 데코레이터로 url parameter 가져오기
     @Get('/:id')
-    getOne(@Param('id') movieId: string): Movie {
+    getOne(@Param('id') movieId: number): Movie {
         return this.moviesService.getOne(movieId);
     }
     // 영화 생성, @Body 데코레이터로 body 데이터 가져오기
     @Post()
-    create(@Body() movieData: any) {
+    create(@Body() movieData: CreateMovieDto) {
         return this.moviesService.create(movieData);
     }
     // 영화 삭제
     @Delete('/:id')
-    remove(@Param('id') movieId: string) {
+    remove(@Param('id') movieId: number) {
         return this.moviesService.deleteOne(movieId);
     }
     // 영화 정보 수정 (Put: 전체 수정, Patch: 일부 수정)
     @Patch('/:id')
-    patch(@Param('id') moviedId: string, @Body() updateData) {
+    patch(@Param('id') moviedId: number, @Body() updateData: UpdateMovieDto) {
         return this.moviesService.update(moviedId, updateData);
     }
 }
