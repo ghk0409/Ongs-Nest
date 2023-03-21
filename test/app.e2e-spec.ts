@@ -51,7 +51,7 @@ describe('AppController (e2e)', () => {
                 .expect([]);
         });
         // POST 테스트
-        it('POST', () => {
+        it('POST 201', () => {
             return request(app.getHttpServer())
                 .post('/movies')
                 .send({
@@ -60,6 +60,18 @@ describe('AppController (e2e)', () => {
                     genres: ['Test'],
                 })
                 .expect(201);
+        });
+        // POST 에러 테스트 (잘못된 데이터로 생성 시)
+        it('POST 400', () => {
+            return request(app.getHttpServer())
+                .post('/movies')
+                .send({
+                    title: 'TEST',
+                    year: 2023,
+                    genres: ['Test'],
+                    other: 'test',
+                })
+                .expect(400);
         });
         // Delete 테스트 (에러 작동 유무 확인)
         it('DELETE', () => {
@@ -70,13 +82,24 @@ describe('AppController (e2e)', () => {
     describe('/movies/:id', () => {
         // 테스트 앱이 유지되기 때문에 앞선 테스트에서 만든 movie에 접근 가능!!
         // 실제 구동 환경에서는 transform이 적용되므로 테스팅 환경도 동일하게 설정 필수!
+        // 조회 API 테스트
         it('GET 200', () => {
             return request(app.getHttpServer()).get('/movies/1').expect(200);
         });
+        // 조회 API 에러 테스트
         it('GET 404', () => {
             return request(app.getHttpServer()).get('/movies/999').expect(404);
         });
-        it.todo('DELETE');
-        it.todo('PATCH');
+        // 수정 API 테스트
+        it('PATCH 200', () => {
+            return request(app.getHttpServer())
+                .patch('/movies/1')
+                .send({ title: 'Updated Test' })
+                .expect(200);
+        });
+        // 삭제 API 테스트
+        it('DELETE 200', () => {
+            return request(app.getHttpServer()).delete('/movies/1').expect(200);
+        });
     });
 });
